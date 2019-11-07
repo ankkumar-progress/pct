@@ -1018,11 +1018,15 @@ public class PCTCompileTest extends BuildFileTestNg {
         rexp.add(" \\.\\.\\. in main file at line 3.*");
         expectLogRegexp("test1", rexp, false);
 
+        expectLogJson("testJson1", "ttProjectErrors", "[{\"fileName\":\"src/dir1/test1.p\",\"mainFileName\":\"src/dir1/test1.p\",\"rowNum\":3,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"}]");
+
         rexp.clear();
         rexp.add("PCTCompile - Progress Code Compiler");
         rexp.add("Error compiling file 'src/dir1/test2.p' \\.\\.\\.");
         rexp.add(" \\.\\.\\. in file 'src/dir1/test2.i' at line 3.*");
         expectLogRegexp("test2", rexp, false);
+
+        expectLogJson("testJson2", "ttProjectErrors", "[{\"fileName\":\"src/dir1/test2.i\",\"mainFileName\":\"src/dir1/test2.p\",\"rowNum\":3,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"}]");
 
         rexp.clear();
         rexp.add("PCTCompile - Progress Code Compiler");
@@ -1034,6 +1038,8 @@ public class PCTCompileTest extends BuildFileTestNg {
         rexp.add(".*");
         rexp.add(" \\.\\.\\. in main file at line 4.*");
         expectLogRegexp("test3", rexp, false);
+
+        expectLogJson("testJson3", "ttProjectErrors", "[{\"fileName\":\"src/dir1/test2.i\",\"mainFileName\":\"src/dir1/test3.p\",\"rowNum\":3,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"},{\"fileName\":\"src/dir1/test3.p\",\"mainFileName\":\"src/dir1/test3.p\",\"rowNum\":4,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"}]");
 
         rexp.clear();
         rexp.add("PCTCompile - Progress Code Compiler");
@@ -1051,6 +1057,8 @@ public class PCTCompileTest extends BuildFileTestNg {
         rexp.add("Error compiling file 'rssw/pct/TestClass2.cls' \\.\\.\\.");
         rexp.add(" \\.\\.\\. in main file at line 2.*");
         expectLogRegexp("test5", rexp, false);
+
+        expectLogJson("testJson5", "ttProjectErrors", "[{\"fileName\":\"rssw/pct/TestClass2.cls\",\"mainFileName\":\"rssw/pct/TestClass2.cls\",\"rowNum\":2,\"colNum\":5,\"msg\":\"** Unable to understand after -- \\\"MTHOD\\\". (247)\"}]");
     }
 
     @Test(groups = {"v10"})

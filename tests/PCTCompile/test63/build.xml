@@ -44,4 +44,38 @@
     </PCTCompile>
   </target>
 
+  <!-- Tests for outputType=json -->
+
+  <target name="testJson1">
+    <PCTCompile destDir="build" dlcHome="${DLC}" relativePaths="true" failOnError="false" outputType="json">
+      <fileset dir="src" includes="**/test1.p" />
+      <propath location="src" />
+      <Profiler enabled="${PROFILER}" coverage="true" outputDir="profiler" />
+    </PCTCompile>
+  </target>
+
+   <target name="testJson2">
+    <PCTCompile destDir="build" dlcHome="${DLC}" relativePaths="true" failOnError="false" outputType="JSON">
+      <fileset dir="src" includes="**/test2.p" />
+      <propath location="src" />
+      <Profiler enabled="${PROFILER}" coverage="true" outputDir="profiler" />
+    </PCTCompile>
+  </target>
+
+  <target name="testJson3">
+    <PCTCompile destDir="build" dlcHome="${DLC}" relativePaths="true" failOnError="false" outputType="json">
+      <fileset dir="src" includes="**/test3.p" />
+      <propath location="src" />
+      <Profiler enabled="${PROFILER}" coverage="true" outputDir="profiler" />
+    </PCTCompile>
+  </target>
+
+  <target name="testJson5">
+    <PCTCompile destDir="build" dlcHome="${DLC}" relativePaths="true" failOnError="false" outputType="json">
+      <fileset dir="." includes="rssw/pct/TestClass2.cls" />
+      <propath location="." />
+      <Profiler enabled="${PROFILER}" coverage="true" outputDir="profiler" />
+    </PCTCompile>
+  </target>
+
 </project>

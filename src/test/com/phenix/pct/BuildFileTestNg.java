@@ -30,6 +30,11 @@ import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.AfterTest;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class BuildFileTestNg {
     private Project project;
 
@@ -174,6 +179,25 @@ public class BuildFileTestNg {
                 Assert.fail("Log '" + s + "' doesn't match regular expression '" + regExp.toString() + "'");
                 return;
             }
+        }
+    }
+
+    public void expectLogJson(String target, String key, String expectedResults) {
+        executeTarget(target);
+        boolean keyFound=false;
+        for (String s : logBuffer) {
+            if( s.indexOf(key) != -1) {
+                keyFound=true;
+                JsonObject jsonObject = new JsonParser().parse(s).getAsJsonObject();
+                String value = jsonObject.get(key).getAsJsonArray().toString();
+                if (!expectedResults.equals(value)) {
+                    Assert.fail("Log '" + value + "' doesn't match expected result in json format '" + expectedResults + "'");
+                    return;
+                }
+            }
+        }
+        if(!keyFound) {
+           Assert.fail("Unable to find json key in logs " + key);
         }
     }
 
