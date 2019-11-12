@@ -1059,6 +1059,10 @@ public class PCTCompileTest extends BuildFileTestNg {
         expectLogRegexp("test5", rexp, false);
 
         expectLogJson("testJson5", "ttProjectErrors", "[{\"fileName\":\"rssw/pct/TestClass2.cls\",\"mainFileName\":\"rssw/pct/TestClass2.cls\",\"rowNum\":2,\"colNum\":5,\"msg\":\"** Unable to understand after -- \\\"MTHOD\\\". (247)\"}]");
+
+        expectLogJson("testJson6", "ttProjectWarnings", "[{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src/dir1/test5.p\",\"mainFileName\":\"src/dir1/test5.p\",\"msg\":\"Cannot reference \\\"DEFINE\\\" as \\\"DEF\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"},{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src/dir1/test5.p\",\"mainFileName\":\"src/dir1/test5.p\",\"msg\":\"Cannot reference \\\"integer\\\" as \\\"INT\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"}]");
+
+        expectLogJson("testJson7", "ttProjectWarnings", "[{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src/dir1/test6.i\",\"mainFileName\":\"src/dir1/test6.p\",\"msg\":\"Cannot reference \\\"VARIABLE\\\" as \\\"VAR\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"}]");
     }
 
     @Test(groups = {"v10"})

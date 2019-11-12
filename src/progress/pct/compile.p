@@ -291,6 +291,7 @@ PROCEDURE compileXref.
   DEFINE VARIABLE cRenameFrom AS CHARACTER NO-UNDO INITIAL ''.
   DEFINE VARIABLE lWarnings AS LOGICAL NO-UNDO INITIAL FALSE.
 
+  EMPTY TEMP-TABLE ttWarnings. /* Emptying the temp-table to store warnings for current file*/
   /* Output progress */
   IF ProgPerc GT 0 THEN DO:
     ASSIGN iLine = iLine + 1.
@@ -419,7 +420,6 @@ PROCEDURE compileXref.
 /* Before 11.7.3, strict mode compiler was throwing errors. 11.7.3 introduced :warning and :error */
 &IF DECIMAL(SUBSTRING(PROVERSION, 1, INDEX(PROVERSION, '.') + 1)) GE 11.7 &THEN
   IF (cOpts GT "") AND bAboveEq117 AND (NOT bAboveEq1173) THEN DO:
-    EMPTY TEMP-TABLE ttWarnings.
     COMPILE VALUE(IF lRelative THEN ipInFile ELSE ipInDir + '/':U + ipInFile) SAVE=FALSE OPTIONS cOpts NO-ERROR.
     IF COMPILER:ERROR THEN DO i = 1 TO COMPILER:NUM-MESSAGES:
       /* Messages 14786, 14789, 18494 are the only relevant ones */
@@ -467,7 +467,11 @@ PROCEDURE compileXref.
           /* Messages 2363, 3619 and 3623 are in fact warnings (from -checkdbe switch) */
           IF (COMPILER:GET-MESSAGE-TYPE(i) EQ 2) OR (COMPILER:GET-NUMBER(i) EQ 2363) OR (COMPILER:GET-NUMBER(i) EQ 3619) OR (COMPILER:GET-NUMBER(i) EQ 3623) THEN DO:
             IF (LOOKUP(STRING(COMPILER:GET-NUMBER(i)), SESSION:SUPPRESS-WARNINGS-LIST) EQ 0) THEN DO:
-              PUT STREAM sWarnings UNFORMATTED SUBSTITUTE("[&1] [&3] &2", COMPILER:GET-ROW(i), REPLACE(COMPILER:GET-MESSAGE(i), '~n', ' '), COMPILER:GET-FILE-NAME(i)) SKIP.
+              CREATE ttWarnings.
+              ASSIGN ttWarnings.msgNum   = COMPILER:GET-NUMBER(i)
+                     ttWarnings.rowNum   = COMPILER:GET-ROW(i)
+                     ttWarnings.fileName = COMPILER:GET-FILE-NAME(i)
+                     ttWarnings.msg      = REPLACE(COMPILER:GET-MESSAGE(i), '~n', ' ').
             END.
           END.
         END.

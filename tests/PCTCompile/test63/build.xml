@@ -78,4 +78,20 @@
     </PCTCompile>
   </target>
 
+  <target name="testJson6">
+    <PCTCompile destDir="build" dlcHome="${DLC}" relativePaths="true" failOnError="false" outputType="JSON" requireFullKeywords="true">
+      <fileset dir="src" includes="**/test5.p" />
+      <propath location="src" />
+      <Profiler enabled="${PROFILER}" coverage="true" outputDir="profiler" />
+    </PCTCompile>
+  </target>
+
+  <target name="testJson7">
+    <PCTCompile destDir="build" dlcHome="${DLC}" relativePaths="true" failOnError="false" outputType="json" requireFullKeywords="true">
+      <fileset dir="src" includes="**/test6.p" />
+      <propath location="src" />
+      <Profiler enabled="${PROFILER}" coverage="true" outputDir="profiler" />
+    </PCTCompile>
+  </target>
+
 </project>
