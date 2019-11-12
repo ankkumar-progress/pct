@@ -1064,6 +1064,16 @@ public class PCTCompileTest extends BuildFileTestNg {
 
         expectLogFileContent("testJson5", errorFile, "{\"ttProjectErrors\":[{\"fileName\":\"rssw\\/pct\\/TestClass2.cls\",\"mainFileName\":\"rssw\\/pct\\/TestClass2.cls\",\"rowNum\":2,\"colNum\":5,\"msg\":\"** Unable to understand after -- \\\"MTHOD\\\". (247)\"}]}");
 
+        // Only work with 11.7+
+        try {
+            DLCVersion version = DLCVersion.getObject(new File(System.getProperty("DLC")));
+            if ((version.getMajorVersion() == 11) && (version.getMinorVersion() <= 6))
+                return;
+        } catch (IOException caught) {
+            return;
+        } catch (InvalidRCodeException caught) {
+            return;
+        }
         expectLogFileContent("testJson6", warningFile, "{\"ttProjectWarnings\":[{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src\\/dir1\\/test5.p\",\"mainFileName\":\"src\\/dir1\\/test5.p\",\"msg\":\"Cannot reference \\\"DEFINE\\\" as \\\"DEF\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"},{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src\\/dir1\\/test5.p\",\"mainFileName\":\"src\\/dir1\\/test5.p\",\"msg\":\"Cannot reference \\\"integer\\\" as \\\"INT\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"}]}");
 
         expectLogFileContent("testJson7", warningFile, "{\"ttProjectWarnings\":[{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src\\/dir1\\/test6.i\",\"mainFileName\":\"src\\/dir1\\/test6.p\",\"msg\":\"Cannot reference \\\"VARIABLE\\\" as \\\"VAR\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"}]}");
@@ -1075,7 +1085,6 @@ public class PCTCompileTest extends BuildFileTestNg {
         configureProject(BASEDIR + "test64/build.xml");
         executeTarget("init");
         executeTarget("build");
-        System.out.println("File r code is " + new File(BASEDIR + "test64/build1/file1.r").getAbsolutePath());
         assertTrue(new File(BASEDIR + "test64/build1/file1.r").exists());
         assertTrue(new File(BASEDIR + "test64/build2/file1.r").exists());
         assertTrue(new File(BASEDIR + "test64/build1/.dbg/file1.p").exists());
