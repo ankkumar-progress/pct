@@ -1010,6 +1010,10 @@ public class PCTCompileTest extends BuildFileTestNg {
 
     @Test(groups = {"v10"})
     public void test63() {
+        // Files where the  errors and warnings are stored when outputType=json.
+        String errorFile = BASEDIR + "test63/build/.pct/projectErrors.json";
+        String warningFile = BASEDIR + "test63/build/.pct/projectWarnings.json";
+
         configureProject(BASEDIR + "test63/build.xml");
 
         List<String> rexp = new ArrayList<>();
@@ -1018,15 +1022,15 @@ public class PCTCompileTest extends BuildFileTestNg {
         rexp.add(" \\.\\.\\. in main file at line 3.*");
         expectLogRegexp("test1", rexp, false);
 
-        expectLogJson("testJson1", "ttProjectErrors", "[{\"fileName\":\"src/dir1/test1.p\",\"mainFileName\":\"src/dir1/test1.p\",\"rowNum\":3,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"}]");
-
+        expectLogFileContent("testJson1", errorFile, "{\"ttProjectErrors\":[{\"fileName\":\"src\\/dir1\\/test1.p\",\"mainFileName\":\"src\\/dir1\\/test1.p\",\"rowNum\":3,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"}]}");
+         
         rexp.clear();
         rexp.add("PCTCompile - Progress Code Compiler");
         rexp.add("Error compiling file 'src/dir1/test2.p' \\.\\.\\.");
         rexp.add(" \\.\\.\\. in file 'src/dir1/test2.i' at line 3.*");
         expectLogRegexp("test2", rexp, false);
 
-        expectLogJson("testJson2", "ttProjectErrors", "[{\"fileName\":\"src/dir1/test2.i\",\"mainFileName\":\"src/dir1/test2.p\",\"rowNum\":3,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"}]");
+        expectLogFileContent("testJson2", errorFile, "{\"ttProjectErrors\":[{\"fileName\":\"src\\/dir1\\/test2.i\",\"mainFileName\":\"src\\/dir1\\/test2.p\",\"rowNum\":3,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"}]}");
 
         rexp.clear();
         rexp.add("PCTCompile - Progress Code Compiler");
@@ -1039,7 +1043,7 @@ public class PCTCompileTest extends BuildFileTestNg {
         rexp.add(" \\.\\.\\. in main file at line 4.*");
         expectLogRegexp("test3", rexp, false);
 
-        expectLogJson("testJson3", "ttProjectErrors", "[{\"fileName\":\"src/dir1/test2.i\",\"mainFileName\":\"src/dir1/test3.p\",\"rowNum\":3,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"},{\"fileName\":\"src/dir1/test3.p\",\"mainFileName\":\"src/dir1/test3.p\",\"rowNum\":4,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"}]");
+        expectLogFileContent("testJson3", errorFile, "{\"ttProjectErrors\":[{\"fileName\":\"src\\/dir1\\/test2.i\",\"mainFileName\":\"src\\/dir1\\/test3.p\",\"rowNum\":3,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"},{\"fileName\":\"src\\/dir1\\/test3.p\",\"mainFileName\":\"src\\/dir1\\/test3.p\",\"rowNum\":4,\"colNum\":1,\"msg\":\"** Unable to understand after -- \\\"MESSGE\\\". (247)\"}]}");
 
         rexp.clear();
         rexp.add("PCTCompile - Progress Code Compiler");
@@ -1058,11 +1062,11 @@ public class PCTCompileTest extends BuildFileTestNg {
         rexp.add(" \\.\\.\\. in main file at line 2.*");
         expectLogRegexp("test5", rexp, false);
 
-        expectLogJson("testJson5", "ttProjectErrors", "[{\"fileName\":\"rssw/pct/TestClass2.cls\",\"mainFileName\":\"rssw/pct/TestClass2.cls\",\"rowNum\":2,\"colNum\":5,\"msg\":\"** Unable to understand after -- \\\"MTHOD\\\". (247)\"}]");
+        expectLogFileContent("testJson5", errorFile, "{\"ttProjectErrors\":[{\"fileName\":\"rssw\\/pct\\/TestClass2.cls\",\"mainFileName\":\"rssw\\/pct\\/TestClass2.cls\",\"rowNum\":2,\"colNum\":5,\"msg\":\"** Unable to understand after -- \\\"MTHOD\\\". (247)\"}]}");
 
-        expectLogJson("testJson6", "ttProjectWarnings", "[{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src/dir1/test5.p\",\"mainFileName\":\"src/dir1/test5.p\",\"msg\":\"Cannot reference \\\"DEFINE\\\" as \\\"DEF\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"},{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src/dir1/test5.p\",\"mainFileName\":\"src/dir1/test5.p\",\"msg\":\"Cannot reference \\\"integer\\\" as \\\"INT\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"}]");
+        expectLogFileContent("testJson6", warningFile, "{\"ttProjectWarnings\":[{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src\\/dir1\\/test5.p\",\"mainFileName\":\"src\\/dir1\\/test5.p\",\"msg\":\"Cannot reference \\\"DEFINE\\\" as \\\"DEF\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"},{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src\\/dir1\\/test5.p\",\"mainFileName\":\"src\\/dir1\\/test5.p\",\"msg\":\"Cannot reference \\\"integer\\\" as \\\"INT\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"}]}");
 
-        expectLogJson("testJson7", "ttProjectWarnings", "[{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src/dir1/test6.i\",\"mainFileName\":\"src/dir1/test6.p\",\"msg\":\"Cannot reference \\\"VARIABLE\\\" as \\\"VAR\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"}]");
+        expectLogFileContent("testJson7", warningFile, "{\"ttProjectWarnings\":[{\"msgNum\":18494,\"rowNum\":2,\"fileName\":\"src\\/dir1\\/test6.i\",\"mainFileName\":\"src\\/dir1\\/test6.p\",\"msg\":\"Cannot reference \\\"VARIABLE\\\" as \\\"VAR\\\" due to the \\\"require-full-keywords\\\" compiler option. (18494)\"}]}");
     }
 
     @Test(groups = {"v10"})
@@ -1071,6 +1075,7 @@ public class PCTCompileTest extends BuildFileTestNg {
         configureProject(BASEDIR + "test64/build.xml");
         executeTarget("init");
         executeTarget("build");
+        System.out.println("File r code is " + new File(BASEDIR + "test64/build1/file1.r").getAbsolutePath());
         assertTrue(new File(BASEDIR + "test64/build1/file1.r").exists());
         assertTrue(new File(BASEDIR + "test64/build2/file1.r").exists());
         assertTrue(new File(BASEDIR + "test64/build1/.dbg/file1.p").exists());

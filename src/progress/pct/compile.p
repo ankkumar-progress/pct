@@ -547,20 +547,20 @@ END PROCEDURE.
 
 PROCEDURE printErrorsWarningsJson.
   IF ( outputType EQ 'json' ) THEN DO:
-    DEFINE VARIABLE jsonProjectErrors   AS JsonObject.
-    DEFINE VARIABLE jsonProjectWarnings AS JsonObject.
     DEFINE VARIABLE httProjectErrors    AS HANDLE.
     DEFINE VARIABLE httProjectWarnings  AS HANDLE.
     
     httProjectErrors   = TEMP-TABLE ttProjectErrors:HANDLE.
     httProjectWarnings = TEMP-TABLE ttProjectWarnings:HANDLE.
+
+    DEFINE VARIABLE ttProjectErrorsFile AS CHARACTER NO-UNDO.
+    ASSIGN ttProjectErrorsFile = PCTDir + '/':U + 'projectErrors.json':U.
+
+    DEFINE VARIABLE ttProjectWarningsFile AS CHARACTER NO-UNDO.
+    ASSIGN ttProjectWarningsFile = PCTDir + '/':U + 'projectWarnings.json':U.
     
-    jsonProjectErrors   = NEW JsonObject().
-    jsonProjectWarnings = NEW JsonObject().
-    httProjectErrors:WRITE-JSON("JsonObject", jsonProjectErrors).
-    RUN logError IN hSrcProc (INPUT STRING(jsonProjectErrors:GetJsonText())).
-    httProjectWarnings:WRITE-JSON("JsonObject", jsonProjectWarnings).
-    RUN logError IN hSrcProc (INPUT STRING(jsonProjectWarnings:GetJsonText())).
+    httProjectErrors:WRITE-JSON("file", ttProjectErrorsFile).
+    httProjectWarnings:WRITE-JSON("file", ttProjectWarningsFile).
   END.
 END PROCEDURE.
 

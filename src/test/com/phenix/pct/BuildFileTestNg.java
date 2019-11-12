@@ -16,7 +16,10 @@
  */
 package com.phenix.pct;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -182,23 +185,19 @@ public class BuildFileTestNg {
         }
     }
 
-    public void expectLogJson(String target, String key, String expectedResults) {
+    /**
+     * Assert that the content of given filename is identical to the expectedContent
+     */
+    public void expectLogFileContent(String target, String file, String expectedContent) {
         executeTarget(target);
-        boolean keyFound=false;
-        for (String s : logBuffer) {
-            if( s.indexOf(key) != -1) {
-                keyFound=true;
-                JsonObject jsonObject = new JsonParser().parse(s).getAsJsonObject();
-                String value = jsonObject.get(key).getAsJsonArray().toString();
-                if (!expectedResults.equals(value)) {
-                    Assert.fail("Log '" + value + "' doesn't match expected result in json format '" + expectedResults + "'");
-                    return;
-                }
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(new File(file).getAbsolutePath())));
+            if (!content.equals(expectedContent)) {
+                Assert.fail("Log '" + content + "' doesn't match expected result '" + expectedContent + "'");
             }
-        }
-        if(!keyFound) {
-           Assert.fail("Unable to find json key in logs " + key);
-        }
+        } catch (IOException e) {
+            Assert.fail("Error while accessing the file  '" + file +"' with message " + e.getMessage() );
+        }  
     }
 
     /**
